@@ -1,0 +1,121 @@
+#include <stdio.h>
+
+int linearSearch(int a[], int n, int x)
+{
+    int i;
+    for(i = 0; i < n; i++)
+    {
+        if(a[i] == x)
+            return i;
+    }
+    return -1;
+}
+
+int binarySearch(int a[], int n, int x)
+{
+    int low = 0, high = n - 1, mid;
+
+    while(low <= high)
+    {
+        mid = (low + high) / 2;
+
+        if(a[mid] == x)
+            return mid;
+        else if(a[mid] < x)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    return -1;
+}
+
+void sort(int a[], int n)
+{
+    int i, j, temp;
+
+    for(i = 0; i < n - 1; i++)
+    {
+        for(j = 0; j < n - i - 1; j++)
+        {
+            if(a[j] > a[j + 1])
+            {
+                temp = a[j];
+                a[j] = a[j + 1];
+                a[j + 1] = temp;
+            }
+        }
+    }
+}
+
+int main()
+{
+    int score[20];
+    int i, sum = 0, n = 10;
+    float avg;
+
+    printf("Enter 10 student scores:\n");
+    for(i = 0; i < n; i++)
+    {
+        scanf("%d", &score[i]);
+        sum += score[i];
+    }
+
+    avg = sum / 10.0;
+
+    printf("\nAverage score = %.2f\n", avg);
+
+    printf("\nAll scores:\n");
+    for(i = 0; i < n; i++)
+        printf("%d ", score[i]);
+
+    int newScore;
+    printf("\n\nEnter new score to insert at 5th position: ");
+    scanf("%d", &newScore);
+
+    for(i = n; i >= 4; i--)
+        score[i] = score[i - 1];
+
+    score[4] = newScore;
+    n++;
+
+    int min = score[0], pos = 0;
+    for(i = 1; i < n; i++)
+    {
+        if(score[i] < min)
+        {
+            min = score[i];
+            pos = i;
+        }
+    }
+
+    for(i = pos; i < n - 1; i++)
+        score[i] = score[i + 1];
+
+    n--;
+
+    printf("\n\nScores after deleting lowest:\n");
+    for(i = 0; i < n; i++)
+        printf("%d ", score[i]);
+
+    int search;
+    printf("\n\nEnter score to search: ");
+    scanf("%d", &search);
+
+    int result = linearSearch(score, n, search);
+
+    if(result == -1)
+        printf("\nLinear Search: Not found");
+    else
+        printf("\nLinear Search: Found at index %d", result);
+
+    sort(score, n);
+
+    result = binarySearch(score, n, search);
+
+    if(result == -1)
+        printf("\nBinary Search: Not found");
+    else
+        printf("\nBinary Search: Found at index %d", result);
+
+    return 0;
+}
